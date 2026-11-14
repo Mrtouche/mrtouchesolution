@@ -1,23 +1,398 @@
-Formation informatique sur ordinateur,
-        utilisation des logiciels et développement
-        des compétences numériques.
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6fa;
+        color: #222;
+        line-height: 1.7;
+    }
+
+    header {
+        background: #071b38;
+        color: white;
+        padding: 18px 6%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    .logo span {
+        color: #ffb400;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 17px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    nav a:hover {
+        color: #ffb400;
+    }
+
+    .accueil {
+        min-height: 480px;
+        padding: 100px 7%;
+        background: linear-gradient(120deg, #071b38, #124c80);
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .accueil h1 {
+        font-size: 38px;
+        margin-bottom: 20px;
+    }
+
+    .accueil h1 span {
+        color: #ffb400;
+        display: block;
+    }
+
+    .accueil p {
+        max-width: 700px;
+        margin-bottom: 28px;
+    }
+
+    .bouton {
+        display: inline-block;
+        background: #ffb400;
+        color: #071b38;
+        padding: 13px 25px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .bouton:hover {
+        background: white;
+        transform: translateY(-2px);
+    }
+
+    section {
+        padding: 65px 7%;
+    }
+
+    .titre {
+        text-align: center;
+        color: #071b38;
+        font-size: 29px;
+        margin-bottom: 30px;
+    }
+
+    .description {
+        max-width: 850px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 22px;
+    }
+
+    .carte {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        transition: 0.3s;
+    }
+
+    .carte:hover {
+        transform: translateY(-5px);
+    }
+
+    .icone {
+        font-size: 38px;
+        margin-bottom: 12px;
+    }
+
+    .carte h3 {
+        color: #124c80;
+        margin-bottom: 10px;
+    }
+
+    .lien {
+        display: inline-block;
+        margin-top: 15px;
+        color: #0756a0;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .detail {
+        background: white;
+        padding: 25px;
+        margin-bottom: 18px;
+        border-left: 5px solid #ffb400;
+        border-radius: 8px;
+    }
+
+    .detail h3 {
+        color: #124c80;
+        margin-bottom: 10px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        background: white;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 400px;
+    }
+
+    th, td {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background: #071b38;
+        color: white;
+    }
+
+    .prix {
+        color: #087b43;
+        font-weight: bold;
+    }
+
+    .paiement {
+        background: #e8eef6;
+        text-align: center;
+    }
+
+    .numero {
+        font-size: 25px;
+        color: #0756a0;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+
+    .contact {
+        background: #071b38;
+        color: white;
+        text-align: center;
+    }
+
+    .contact .titre {
+        color: white;
+    }
+
+    .contact-numero {
+        font-size: 25px;
+        color: #ffb400;
+        font-weight: bold;
+        margin: 18px 0;
+    }
+
+    footer {
+        background: #041226;
+        color: white;
+        text-align: center;
+        padding: 22px;
+        font-size: 14px;
+    }
+
+    .
+whatsapp-flottant {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background: #25d366;
+        color: white;
+        padding: 13px 18px;
+        border-radius: 35px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 1000;
+    }
+
+    @media (max-width: 600px) {
+        header {
+            justify-content: center;
+            text-align: center;
+        }
+
+        nav {
+            justify-content: center;
+        }
+
+        .accueil {
+            padding: 75px 6%;
+        }
+
+        .accueil h1 {
+            font-size: 29px;
+        }
+
+        .titre {
+            font-size: 25px;
+        }
+    }
+</style>
+<nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#apropos">À propos</a>
+    <a href="#services">Services</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#contact">Contact</a>
+</nav>
+<p>
+    Votre partenaire de confiance en technologie,
+    informatique, automobiles, formations et traduction.
+</p>
+
+<a href="#services" class="bouton">
+    Découvrir nos services
+</a>
+<div class="description">
+    <p>
+        MR TOUCHE SOLUTION est une entreprise multiservices
+        spécialisée dans les solutions technologiques,
+        informatiques, automobiles et éducatives.
+    </p>
+
+    <br>
+
+    <p>
+        Notre objectif est de proposer des services de qualité,
+        des solutions modernes et un accompagnement professionnel
+        à nos clients.
+    </p>
+</div>
+<div class="services">
+
+    <div class="carte">
+        <div class="icone">📱</div>
+        <h3>Déverrouillage de téléphones</h3>
+        <p>Assistance Android et iPhone, déverrouillage réseau et configuration des appareils compatibles.</p>
+        <a class="lien" href="#telephone">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">💻</div>
+        <h3>Installation Windows sur Mac</h3>
+        <p>Installation de Windows, antivirus, Microsoft Office et autres logiciels.</p>
+        <a class="lien" href="#windows">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🚗</div>
+        <h3>Vente de véhicules</h3>
+        <p>Véhicules neufs et d'occasion américains, japonais, européens et chinois.</p>
+        <a class="lien" href="#automobile">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🔧</div>
+        <h3>Pièces automobiles</h3>
+        <p>Recherche de pièces de rechange pour différentes marques et modèles.</p>
+        <a class="lien" href="#pieces">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🖥️</div>
+        <h3>Formation informatique</h3>
+        <p>Formation sur ordinateur, utilisation des logiciels et compétences numériques.</p>
+        <a class="lien" href="#formation">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🌍</div>
+        <h3>Langues et traduction</h3>
+        <p>Apprentissage de différentes langues et traduction de documents en ligne.</p>
+        <a class="lien" href="#langues">En savoir plus →</a>
+    </div>
+
+</div>
+<div class="detail" id="telephone">
+    <h3>📱 Déverrouillage Android et iPhone</h3>
+    <p>
+        Assistance pour Samsung, Xiaomi, OPPO, Vivo, Realme,
+        OnePlus et iPhone. Déverrouillage réseau sur appareils
+        compatibles appartenant à leurs propriétaires.
+    </p>
+</div>
+
+<div class="detail" id="windows">
+    <h3>💻 Installation de Windows sur Mac</h3>
+    <p>
+        Installation et configuration de Windows sur les Mac
+        compatibles, antivirus, Microsoft Office, mises à jour
+        et logiciels préférés.
+    </p>
+</div>
+
+<div class="detail" id="automobile">
+    <h3>🚗 Vente de véhicules neufs et d'occasion</h3>
+    <p>
+        Recherche de véhicules américains, japonais, européens
+        et chinois : voitures, SUV, pick-up, camions, bus et engins.
+        Accompagnement à l'achat et à l'importation.
+    </p>
+</div>
+
+<div class="detail" id="pieces">
+    <h3>🔧 Pièces de rechange automobiles</h3>
+    <p>
+Pièces moteur, freinage, suspension, filtres, huiles,
+        pneus, batteries, accessoires et éclairage.
+    </p>
+</div>
+
+<div class="detail" id="formation">
+    <h3>🖥️ Formation en informatique</h3>
+    <p>
+        Formation informatique sur ordinateur, utilisation des
+        logiciels et développement des compétences numériques.
     </p>
 </div>
 
 <div class="detail" id="langues">
     <h3>🌍 Apprentissage des langues et traduction</h3>
     <p>
-        Apprentissage de différentes langues,
-        accompagnement linguistique et traduction
-        de documents en ligne.
+        Apprentissage de différentes langues, accompagnement
+        linguistique et traduction de documents en ligne.
     </p>
 </div>
-<h2 class="titre">Nos tarifs</h2>
-
 <div class="table-container">
-
     <table>
-
         <tr>
             <th>Prestations</th>
             <th>Prix</th>
@@ -57,209 +432,26 @@ Formation informatique sur ordinateur,
             <td>Tarif mensuel langues</td>
             <td class="prix">20 USD / mois</td>
         </tr>
-
     </table>
-
 </div>
 
 <p class="description" style="margin-top:25px;">
     Pour les véhicules et les pièces automobiles,
     contactez-nous pour un devis personnalisé.
 </p>
-<h2 class="titre">Paiement</h2>
-
-<p>Numéro de paiement :</p>
-
-<div class="numero">
-    +243 817 854 562
-</div>
-
-<p>
-    Veuillez confirmer les informations
-    du bénéficiaire avant tout transfert.
-</p>
-<h2 class="titre">Contactez-nous</h2>
-
 <p>
     Besoin d'informations sur nos services ?
     Écrivez-nous directement sur WhatsApp.
 </p>
 
 <div class="contact-numero">
-    +243 978 581 619
+    +243 978 591 619
 </div>
 
 <a
-    href="https://wa.me/243978581619?text=Bonjour%20MR%20TOUCHE%20SOLUTION"
+    href="https://wa.me/243978591619?text=Bonjour%20MR%20TOUCHE%20SOLUTION"
     class="bouton"
     target="_blank"
-    rel="noopener">
+    rel="noopener noreferrer">
     Contacter sur WhatsApp
 </a>
-<h3>MR TOUCHE SOLUTION</h3>
-
-<p>
-    Innovation • Technologie • Professionnalisme
-</p>
-
-<p>
-    © 2026 MR TOUCHE SOLUTION.
-    Tous droits réservés.
-</p>
-<div class="logo">
-    MR <span>TOUCHE</span> SOLUTION
-</div>
-
-<nav>
-    <a href="#accueil">Accueil</a>
-    <a href="#apropos">À propos</a>
-    <a href="#services">Services</a>
-    <a href="#tarifs">Tarifs</a>
-    <a href="#contact">Contact</a>
-</nav>
-<h1>
-    BIENVENUE CHEZ
-    <span>MR TOUCHE SOLUTION</span>
-</h1>
-
-<p>
-    Votre partenaire de confiance en technologie,
-    informatique, automobiles, formations
-    et traduction.
-</p>
-
-<a href="#services" class="bouton">
-    Découvrir nos services
-</a>
-<h2 class="titre">Qui sommes-nous ?</h2>
-
-<div class="description">
-
-    <p>
-        MR TOUCHE SOLUTION est une entreprise
-        multiservices spécialisée dans les solutions
-        technologiques, informatiques, automobiles
-        et éducatives.
-    </p>
-
-    <br>
-
-    <p>
-        Notre objectif est de proposer des services
-        de qualité, des solutions modernes et un
-        accompagnement professionnel à nos clients.
-    </p>
-
-</div>
-<h2 class="titre">Nos domaines d'activité</h2>
-
-<div class="services">
-
-    <div class="carte">
-        <div class="icone">📱</div>
-        <h3>Déverrouillage de téléphones</h3>
-        <p>
-            Assistance Android et iPhone,
-            déverrouillage réseau et configuration
-            des appareils compatibles.
-        </p>
-        <a class="lien" href="#telephone">En savoir plus →</a>
-    </div>
-
-    <div class="carte">
-        <div class="icone">💻</div>
-        <h3>Installation Windows sur Mac</h3>
-        <p>
-            Installation de Windows, antivirus,
-            Microsoft Office et logiciels.
-        </p>
-        <a class="lien" href="#windows">En savoir plus →</a>
-    </div>
-
-    <div class="carte">
-        <div class="icone">🚗</div>
-        <h3>Vente de véhicules</h3>
-        <p>
-            Véhicules neufs et d'occasion
-            américains, japonais, européens
-            et chinois.
-        </p>
-        <a class="lien" href="#automobile">En savoir plus →</a>
-    </div>
-
-    <div class="carte">
-        <div class="icone">🔧</div>
-        <h3>Pièces automobiles</h3>
-        <p>
-            Recherche de pièces de rechange
-            pour différentes marques et modèles.
-        </p>
-        <a class="lien" href="#pieces">En savoir plus →</a>
-    </div>
-
-    <div class="carte">
-        <div class="icone">🖥️</div>
-        <h3>Formation informatique</h3>
-        <p>
-            Formation sur ordinateur,
-            apprentissage et compétences numériques.
-        </p>
-        <a class="lien" href="#formation">En savoir plus →</a>
-    </div>
-
-    <div class="carte">
-        <div class="icone">🌍</div>
-        <h3>Langues et traduction</h3>
-        <p>
-            Apprentissage des langues
-            et traduction de documents en ligne.
-        </p>
-        <a class="lien" href="#langues">En savoir plus →</a>
-    </div>
-
-</div>
-<h2 class="titre">Nos prestations</h2>
-
-<div class="detail" id="telephone">
-    <h3>📱 Déverrouillage Android et iPhone</h3>
-    <p>
-        Assistance pour Samsung, Xiaomi, OPPO,
-        Vivo, Realme, OnePlus et iPhone.
-        Déverrouillage réseau sur appareils
-        compatibles et appartenant à leurs propriétaires.
-    </p>
-</div>
-
-<div class="detail" id="windows">
-    <h3>💻 Installation de Windows sur Mac</h3>
-    <p>
-        Installation et configuration de Windows
-        sur les Mac compatibles, antivirus,
-        Microsoft Office, mises à jour
-        et logiciels préférés.
-    </p>
-</div>
-
-<div class="detail" id="automobile">
-    <h3>🚗 Vente de véhicules neufs et d'occasion</h3>
-    <p>
-        Recherche de véhicules américains,
-        japonais, européens et chinois.
-        Voitures, SUV, pick-up, camions,
-        bus et engins.
-        Accompagnement à l'achat et à l'importation.
-    </p>
-</div>
-
-<div class="detail" id="pieces">
-    <h3>🔧 Pièces de rechange automobiles</h3>
-    <p>
-        Pièces moteur, freinage, suspension,
-        filtres, huiles, pneus, batteries,
-        accessoires et éclairage.
-    </p>
-</div>
-
-<div class="detail" id="formation">
-    <h3>🖥️ Formation en informatique</h3>
-    <p>
