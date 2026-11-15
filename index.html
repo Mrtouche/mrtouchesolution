@@ -479,7 +479,132 @@ whatsapp-flottant {
     .accueil, .accueil::before, .accueil::after { animation: none !important; }
 }
 /* ===== FIN FOND ANIME ===== */
-</style>
+/* =====================================
+   MR TOUCHE SOLUTION - NEON GLOBAL
+===================================== */
+
+/* Textes bien visibles */
+body {
+    color: #ffffff;
+}
+
+h1, h2, h3, h4 {
+    color: #00eaff !important;
+    text-shadow: 0 0 8px #007bff,
+                 0 0 15px #00eaff;
+    animation: neonText 3s infinite alternate;
+}
+
+p {
+    color: #eaf5ff;
+}
+
+/* Toutes les images du site */
+img {
+    border: 3px solid #00eaff;
+    border-radius: 14px;
+    box-shadow: 0 0 10px #007bff,
+                0 0 20px #00eaff;
+    animation: neonImage 4s ease-in-out infinite;
+    transition: transform 0.4s;
+}
+
+img:hover {
+    transform: scale(1.04);
+}
+
+/* Cartes et blocs */
+.card, .carte, .service {
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 12px rgba(0,234,255,0.4);
+    transition: 0.4s;
+}
+
+.card:hover, .carte:hover, .service:hover {
+    box-shadow: 0 0 25px #00eaff;
+    transform: translateY(-5px);
+}
+
+/* Animation des textes */
+@keyframes neonText {
+    from {
+        text-shadow: 0 0 5px #007bff;
+    }
+    to {
+        text-shadow: 0 0 15px #00eaff,
+                     0 0 30px #007bff;
+    }
+}
+
+/* Animation des images */
+@keyframes neonImage {
+    0%, 100% {
+        box-shadow: 0 0 8px #007bff,
+                    0 0 15px #00eaff;
+    }
+    50% {
+        box-shadow: 0 0 20px #00eaff,
+                    0 0 35px #007bff;
+    }
+}/* ===================================== CORRECTION VISIBILITÉ - MR TOUCHE ===================================== */
+/* Fond général */ body { background: #eef5ff !important; color: #172b45 !important; }
+/* Tous les titres */ h1, h2, h3, h4, h5, h6 { color: #073b75 !important; text-shadow: 0 0 5px rgba(0, 180, 255, 0.25) !important; animation: none !important; }
+/* Tous les textes */ p, li, span, label { color: #24364b !important; }
+/* Liens */ a { color: #0759a8 !important; font-weight: 600; }
+a:hover { color: #008cff !important; }
+/* Cartes des services */ :is(.service-card, .service, .carte, .card, .service-item, article) { background: linear-gradient( 145deg, #ffffff, #eaf4ff ) !important;
+color: #172b45 !important;
+border: 1px solid #69caff !important;
+border-radius: 16px !important;
+
+box-shadow:
+    0 4px 15px rgba(0, 100, 200, 0.12),
+    0 0 8px rgba(0, 220, 255, 0.15);
+
+transition: 0.4s;
+}
+:is(.service-card, .service, .carte, .card, .service-item, article) p { color: #24364b !important; }
+:is(.service-card, .service, .carte, .card, .service-item, article) h3 { color: #073b75 !important; }
+/* Cadre NEON autour de toutes les images */ img { padding: 5px !important; background: linear-gradient( 135deg, #003b9b, #00dfff, #0066ff, #003b9b ) !important;
+background-size: 300% 300% !important;
+border: 0 !important;
+border-radius: 15px !important;
+
+box-shadow:
+    0 0 10px #008cff,
+    0 0 20px rgba(0, 220, 255, 0.6) !important;
+
+animation: cadreNeon 4s ease infinite !important;
+transition: transform 0.4s;
+}
+img:hover { transform: scale(1.03); }
+/* Animation du cadre */ @keyframes cadreNeon { 0% { background-position: 0% 50%; box-shadow: 0 0 8px #007bff; }
+50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 22px #00eaff;
+}
+
+100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 8px #007bff;
+}
+}
+/* Fond technologique discret */ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+background:
+    radial-gradient(
+        circle at 10% 20%,
+        rgba(0, 180, 255, 0.12),
+        transparent 35%
+    ),
+    radial-gradient(
+        circle at 90% 80%,
+        rgba(0, 100, 255, 0.10),
+        transparent 35%
+    );
+}
+/* Boutons */ button, .btn { background: #0759b5 !important; color: white !important; border-radius: 25px; box-shadow: 0 0 12px rgba(0, 150, 255, 0.5); }
+button:hover, .btn:hover { background: #008cff !important; }
+/* Menu */ nav a { color: #ffffff !important; }</style>
 <nav>
     <a href="#accueil">Accueil</a>
     <a href="#apropos">À propos</a>
