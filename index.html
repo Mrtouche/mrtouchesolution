@@ -4,6 +4,164 @@
 <meta property="og:image" content="https://mrtouchesolution.netlify.app/images/apercu.jpg">
 <meta property="og:url" content="https://mrtouchesolution.netlify.app/">
 <style>
+/* COULEURS GENERALES */
+:root {
+  --bleu: #087cff;
+  --cyan: #00d9ff;
+  --or: #ffc400;
+  --fond: #030817;
+}
+
+<script>
+const elements = document.querySelectorAll(
+  '#apropos, #services, #tarifs, #contact, .carte'
+);
+
+elements.forEach(element => {
+  element.classList.add('reveal');
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+elements.forEach(element => observer.observe(element));
+</script>
+body {
+  background: var(--fond);
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* ACCUEIL ET IMAGE DE FOND */
+#accueil,
+.accueil,
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #030817;
+  color: white;
+}
+
+#accueil::before,
+.accueil::before,
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 8, 25, .96),
+      rgba(2, 8, 25, .45)
+    ),
+    url("fond-mr-touche-solution.png")
+    center / cover no-repeat;
+  animation: fondVivant 18s ease-in-out infinite alternate;
+}
+
+@keyframes fondVivant {
+  from {
+    background-position: 45% 50%;
+  }
+  to {
+    background-position: 55% 50%;
+  }
+}
+
+/* TITRES LUMINEUX */
+h1, h2 {
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(0, 160, 255, .5);
+}
+
+h1 span, h2 span {
+  color: var(--or);
+}
+
+p {
+  color: #e5edff;
+  line-height: 1.8;
+}
+
+/* CARTES DE SERVICES */
+.carte, .service-card, .card,
+.services article {
+  background: rgba(7, 25, 65, .85);
+  border: 1px solid rgba(0, 180, 255, .5);
+  border-radius: 16px;
+  padding: 25px;
+  transition: transform .4s, box-shadow .4s;
+}
+
+.carte:hover, .service-card:hover,
+.card:hover, .services article:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 25px rgba(0, 180, 255, .6);
+}
+
+/* BOUTONS */
+button, .bouton {
+  background: linear-gradient(90deg, #007bff, #00cfff);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 25px;
+  font-weight: bold;
+  transition: .3s;
+  cursor: pointer;
+}
+
+button:hover, .bouton:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 20px #00bfff;
+}
+
+/* ANIMATION DES SECTIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity .8s, transform .8s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* TELEPHONES */
+@media (max-width: 768px) {
+  #accueil, .accueil, .hero {
+    min-height: 500px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  #accueil::before,
+  .accueil::before,
+  .hero::before {
+    background-position: center;
+  }
+}
+
+/* RESPECTER LES PREFERENCES D'ANIMATION */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+<style>
     * {
         margin: 0;
         padding: 0;
@@ -271,6 +429,56 @@ whatsapp-flottant {
         }
     }
 
+/* ===== DEBUT FOND ANIME ===== */
+@keyframes degrade {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes flotte {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-30px) scale(1.08); }
+}
+
+.accueil {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, #0b1f4d, #1e3a8a, #0f766e, #1e3a8a);
+    background-size: 300% 300%;
+    animation: degrade 14s ease infinite;
+}
+.accueil::before,
+.accueil::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+}
+.accueil::before {
+    width: 260px; height: 260px;
+    background: rgba(245, 184, 0, 0.25);
+    top: -60px; left: -60px;
+    animation: flotte 9s ease-in-out infinite;
+}
+.accueil::after {
+    width: 200px; height: 200px;
+    background: rgba(255, 255, 255, 0.12);
+    bottom: -50px; right: 8%;
+    animation: flotte 11s ease-in-out infinite reverse;
+}
+.accueil > * { position: relative; z-index: 1; }
+
+/* Couleurs des écrits */
+.accueil h1 { color: #ffffff; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35); }
+.accueil p  { color: #e6eefc; }
+.carte h3   { color: #1e3a8a; }
+.carte p    { color: #475569; }
+.carte .lien { color: #0f766e; font-weight: 700; }
+.carte .lien:hover { color: #d97706; }
+
+@media (prefers-reduced-motion: reduce) {
+    .accueil, .accueil::before, .accueil::after { animation: none !important; }
+}
+/* ===== FIN FOND ANIME ===== */
 </style>
 <nav>
     <a href="#accueil">Accueil</a>
