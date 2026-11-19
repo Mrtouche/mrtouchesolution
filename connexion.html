@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion – MR TOUCHE SOLUTION</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:30px;padding:20px;font-family:Arial,sans-serif;color:#fff;background:radial-gradient(circle at 25% 50%,#3a2b14,#14100a 60%)}
+/* Lampe */
+.lampe{width:260px;max-width:70vw;animation:flotte 6s ease-in-out infinite}
+.lampe .lumiere{animation:lueur 3s ease-in-out infinite alternate;transform-origin:120px 130px}
+@keyframes flotte{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes lueur{from{opacity:.55}to{opacity:1}}
+/* Carte */
+.carte{width:100%;max-width:400px;background:rgba(20,22,28,.92);border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:34px 28px;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:entree .8s ease both}
+@keyframes entree{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+h1{font-size:30px}
+.sous{color:#9aa0ab;font-size:14px;margin:4px 0 20px}
+.onglets{display:flex;background:#101218;border-radius:12px;padding:4px;margin-bottom:20px}
+.onglets button{flex:1;padding:11px;border:0;border-radius:9px;background:none;color:#9aa0ab;font-weight:bold;cursor:pointer;transition:.3s}
+.onglets button.on{background:#2b2e36;color:#fff}
+label{display:block;font-size:13px;color:#c4c8d0;margin:14px 0 6px}
+.champ{position:relative}
+.champ input{width:100%;padding:14px 44px 14px 14px;border-radius:12px;border:1px solid #2b2e36;background:#1a1d24;color:#fff;font-size:15px;outline:none;transition:.3s}
+.champ input:focus{border-color:#f0b24a;box-shadow:0 0 0 3px rgba(240,178,74,.2)}
+.oeil{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:0;color:#9aa0ab;cursor:pointer;font-size:18px}
+.ligne{display:flex;justify-content:space-between;align-items:center}
+.ligne a{color:#f0b24a;font-size:13px;font-weight:bold;text-decoration:none;margin-top:14px}
+.souvenir{display:flex;align-items:center;gap:8px;margin:16px 0;font-size:14px;color:#c4c8d0}
+.souvenir input{accent-color:#f0b24a;width:18px;height:18px}
+.principal{width:100%;padding:15px;border:0;border-radius:13px;background:linear-gradient(90deg,#e8a93c,#f6c46a);color:#14100a;font-weight:bold;font-size:16px;cursor:pointer;transition:.3s}
+.principal:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,178,74,.4)}
+.ou{text-align:center;font-size:12px;color:#7d828c;margin:20px 0 14px;letter-spacing:1px}
+.sociaux{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sociaux button{padding:13px;border-radius:12px;border:1px solid #2b2e36;background:#1a1d24;color:#fff;font-size:17px;cursor:pointer;transition:.3s}
+.sociaux button:hover{background:#2b2e36}
+#msg{min-height:20px;margin-top:12px;font-size:14px;text-align:center}
+.erreur{color:#ff7b7b}.ok{color:#5fe39a}
+.cache{display:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- Lampe animée (dessinée en SVG, pas besoin d’image) -->
+<svg class="lampe" viewBox="0 0 260 380" aria-hidden="true">
+  <defs>
+    <radialGradient id="g"><stop offset="0" stop-color="#ffd87a" stop-opacity=".8"/><stop offset="1" stop-color="#ffd87a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd87a" stop-opacity=".35"/><stop offset="1" stop-color="#ffd87a" stop-opacity="0"/></linearGradient>
+  </defs>
+  <polygon class="lumiere" points="110,150 70,340 260,340 230,160" fill="url(#r)"/>
+  <ellipse class="lumiere" cx="125" cy="130" rx="70" ry="50" fill="url(#g)"/>
+  <ellipse cx="70" cy="350" rx="60" ry="10" fill="#222"/>
+  <rect x="50" y="338" width="60" height="10" rx="5" fill="#2a2d34"/>
+  <line x1="80" y1="340" x2="62" y2="230" stroke="#2a2d34" stroke-width="9" stroke-linecap="round"/>
+  <line x1="62" y1="230" x2="105" y2="140" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="62" cy="230" r="11" fill="#e8a93c"/><circle cx="80" cy="340" r="11" fill="#e8a93c"/>
+  <path d="M65 130 Q75 50 135 55 Q195 65 195 130 Z" fill="#15171c"/>
+  <path d="M65 130 Q130 150 195 130 Z" fill="#f6c46a"/>
+  <circle class="lumiere" cx="128" cy="136" r="9" fill="#fff4c8"/>
+  <line x1="128" y1="140" x2="128" y2="215" stroke="#f6c46a" stroke-width="2"/>
+  <circle cx="128" cy="222" r="9" fill="#e8a93c" opacity=".7"/>
+</svg>
+
+<div class="carte">
+  <h1>Bienvenue</h1>
+  <p class="sous" id="sous">Connectez-vous pour accéder au site</p>
+
+  <div class="onglets">
+    <button id="t1" class="on" type="button">Connexion</button>
+    <button id="t2" type="button">Inscription</button>
+  </div>
+
+  <div id="bloc-nom" class="cache">
+    <label for="nom">Nom complet</label>
+    <div class="champ"><input id="nom" placeholder="Votre nom"></div>
+  </div>
+
+  <label for="id" id="l-id">Nom d’utilisateur ou e-mail</label>
+  <div class="champ"><input id="id" placeholder="Entrez votre nom d’utilisateur ou e-mail" autocomplete="username"></div>
+
+  <div class="ligne"><label for="mdp">Mot de passe</label><a href="#" onclick="oublie();return false">Oublié ?</a></div>
+  <div class="champ">
+    <input id="mdp" type="password" placeholder="Entrez votre mot de passe" autocomplete="current-password">
+    <button class="oeil" type="button" id="oeil" aria-label="Afficher le mot de passe">👁</button>
+  </div>
+
+  <div id="bloc-conf" class="cache">
+    <label for="conf">Confirmer le mot de passe</label>
+    <div class="champ"><input id="conf" type="password" placeholder="Répétez le mot de passe"></div>
+  </div>
+
+  <label class="souvenir"><input type="checkbox" id="souvenir" checked> Se souvenir de moi</label>
+  <button class="principal" id="go" type="button">Se connecter →</button>
+  <div id="msg"></div>
+
+  <div class="ou">OU CONTINUER AVEC</div>
+  <div class="sociaux">
+    <button type="button" onclick="bientot()">G</button>
+    <button type="button" onclick="bientot()">⌥</button>
+    <button type="button" onclick="bientot()"></button>
+  </div>
+</div>
+
+<script>
+let mode = "connexion";
+const $ = id => document.getElementById(id);
+const msg = (t, c) => { $("msg").textContent = t; $("msg").className = c; };
+
+/* Onglets Connexion / Inscription */
+function changer(m) {
+  mode = m;
+  const ins = m === "inscription";
+  $("t1").classList.toggle("on", !ins); $("t2").classList.toggle("on", ins);
+  $("bloc-nom").classList.toggle("cache", !ins);
+  $("bloc-conf").classList.toggle("cache", !ins);
+  $("go").textContent = ins ? "Créer mon compte →" : "Se connecter →";
+  $("sous").textContent = ins ? "Créez un compte pour accéder au site" : "Connectez-vous pour accéder au site";
+  msg("", "");
+}
+$("t1").onclick = () => changer("connexion");
+$("t2").onclick = () => changer("inscription");
+
+/* Afficher / cacher le mot de passe */
+$("oeil").onclick = () => { $("mdp").type = $("mdp").type === "password" ? "text" : "password"; };
+
+/* Mot de passe chiffré (SHA-256) avant d’être gardé */
+async function hash(t) {
+  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
+}
+const users = () => JSON.parse(localStorage.getItem("mt_users") || "[]");
+
+$("go").onclick = async () => {
+  const id = $("id").value.trim().toLowerCase(), mdp = $("mdp").value;
+  if (!id || !mdp) return msg("Remplissez tous les champs.", "erreur");
+  const h = await hash(mdp);
+  const liste = users();
+
+  if (mode === "inscription") {
+    const nom = $("nom").value.trim();
+    if (!nom) return msg("Entrez votre nom.", "erreur");
+    if (mdp.length < 6) return msg("Mot de passe : 6 caractères minimum.", "erreur");
+    if (mdp !== $("conf").value) return msg("Les mots de passe ne correspondent pas.", "erreur");
+    if (liste.some(u => u.id === id)) return msg("Ce compte existe déjà.", "erreur");
+    liste.push({ id, nom, h });
+    localStorage.setItem("mt_users", JSON.stringify(liste));
+    msg("Compte créé ! Connexion…", "ok");
+    return ouvrir(id);
+  }
+
+  const u = liste.find(x => x.id === id && x.h === h);
+  if (!u) return msg("Identifiant ou mot de passe incorrect.", "erreur");
+  msg("Bienvenue " + u.nom + " !", "ok");
+  ouvrir(id);
+};
+
+function ouvrir(id) {
+  (($("souvenir").checked) ? localStorage : sessionStorage).setItem("mt_session", id);
+  setTimeout(() => location.href = "index.html", 700);
+}
+function oublie() { alert("Contactez MR TOUCHE SOLUTION sur WhatsApp : +243 978 591 619"); }
+function bientot() { alert("Cette connexion sera disponible bientôt."); }
+
+/* Déjà connecté ? on va directement au site */
+if (localStorage.getItem("mt_session") || sessionStorage.getItem("mt_session")) location.replace("index.html");
+</script>
+</body>
+</html>

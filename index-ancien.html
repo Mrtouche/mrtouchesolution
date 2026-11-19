@@ -1,0 +1,796 @@
+<meta property="og:type" content="website">
+<meta property="og:title" content="MR TOUCHE SOLUTION - Services informatiques et automobiles">
+<meta property="og:description" content="Déverrouillage de téléphones, installation Windows sur Mac, vente de véhicules et pièces automobiles.">
+<meta property="og:image" content="https://mrtouchesolution.netlify.app/images/apercu.jpg">
+<meta property="og:url" content="https://mrtouchesolution.netlify.app/">
+<style>
+/* COULEURS GENERALES */
+:root {
+  --bleu: #087cff;
+  --cyan: #00d9ff;
+  --or: #ffc400;
+  --fond: #030817;
+}
+
+<script>
+const elements = document.querySelectorAll(
+  '#apropos, #services, #tarifs, #contact, .carte'
+);
+
+elements.forEach(element => {
+  element.classList.add('reveal');
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+elements.forEach(element => observer.observe(element));
+</script>
+body {
+  background: var(--fond);
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* ACCUEIL ET IMAGE DE FOND */
+#accueil,
+.accueil,
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #030817;
+  color: white;
+}
+
+#accueil::before,
+.accueil::before,
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 8, 25, .96),
+      rgba(2, 8, 25, .45)
+    ),
+    url("fond-mr-touche-solution.png")
+    center / cover no-repeat;
+  animation: fondVivant 18s ease-in-out infinite alternate;
+}
+
+@keyframes fondVivant {
+  from {
+    background-position: 45% 50%;
+  }
+  to {
+    background-position: 55% 50%;
+  }
+}
+
+/* TITRES LUMINEUX */
+h1, h2 {
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(0, 160, 255, .5);
+}
+
+h1 span, h2 span {
+  color: var(--or);
+}
+
+p {
+  color: #e5edff;
+  line-height: 1.8;
+}
+
+/* CARTES DE SERVICES */
+.carte, .service-card, .card,
+.services article {
+  background: rgba(7, 25, 65, .85);
+  border: 1px solid rgba(0, 180, 255, .5);
+  border-radius: 16px;
+  padding: 25px;
+  transition: transform .4s, box-shadow .4s;
+}
+
+.carte:hover, .service-card:hover,
+.card:hover, .services article:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 25px rgba(0, 180, 255, .6);
+}
+
+/* BOUTONS */
+button, .bouton {
+  background: linear-gradient(90deg, #007bff, #00cfff);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 25px;
+  font-weight: bold;
+  transition: .3s;
+  cursor: pointer;
+}
+
+button:hover, .bouton:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 20px #00bfff;
+}
+
+/* ANIMATION DES SECTIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity .8s, transform .8s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* TELEPHONES */
+@media (max-width: 768px) {
+  #accueil, .accueil, .hero {
+    min-height: 500px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  #accueil::before,
+  .accueil::before,
+  .hero::before {
+    background-position: center;
+  }
+}
+
+/* RESPECTER LES PREFERENCES D'ANIMATION */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6fa;
+        color: #222;
+        line-height: 1.7;
+    }
+
+    header {
+        background: #071b38;
+        color: white;
+        padding: 18px 6%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    .logo span {
+        color: #ffb400;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 17px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    nav a:hover {
+        color: #ffb400;
+    }
+
+    .accueil {
+        min-height: 480px;
+        padding: 100px 7%;
+        background: linear-gradient(120deg, #071b38, #124c80);
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .accueil h1 {
+        font-size: 38px;
+        margin-bottom: 20px;
+    }
+
+    .accueil h1 span {
+        color: #ffb400;
+        display: block;
+    }
+
+    .accueil p {
+        max-width: 700px;
+        margin-bottom: 28px;
+    }
+
+    .bouton {
+        display: inline-block;
+        background: #ffb400;
+        color: #071b38;
+        padding: 13px 25px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .bouton:hover {
+        background: white;
+        transform: translateY(-2px);
+    }
+
+    section {
+        padding: 65px 7%;
+    }
+
+    .titre {
+        text-align: center;
+        color: #071b38;
+        font-size: 29px;
+        margin-bottom: 30px;
+    }
+
+    .description {
+        max-width: 850px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 22px;
+    }
+
+    .carte {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        transition: 0.3s;
+    }
+
+    .carte:hover {
+        transform: translateY(-5px);
+    }
+
+    .icone {
+        font-size: 38px;
+        margin-bottom: 12px;
+    }
+
+    .carte h3 {
+        color: #124c80;
+        margin-bottom: 10px;
+    }
+
+    .lien {
+        display: inline-block;
+        margin-top: 15px;
+        color: #0756a0;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .detail {
+        background: white;
+        padding: 25px;
+        margin-bottom: 18px;
+        border-left: 5px solid #ffb400;
+        border-radius: 8px;
+    }
+
+    .detail h3 {
+        color: #124c80;
+        margin-bottom: 10px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        background: white;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 400px;
+    }
+
+    th, td {
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background: #071b38;
+        color: white;
+    }
+
+    .prix {
+        color: #087b43;
+        font-weight: bold;
+    }
+
+    .paiement {
+        background: #e8eef6;
+        text-align: center;
+    }
+
+    .numero {
+        font-size: 25px;
+        color: #0756a0;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+
+    .contact {
+        background: #071b38;
+        color: white;
+        text-align: center;
+    }
+
+    .contact .titre {
+        color: white;
+    }
+
+    .contact-numero {
+        font-size: 25px;
+        color: #ffb400;
+        font-weight: bold;
+        margin: 18px 0;
+    }
+
+    footer {
+        background: #041226;
+        color: white;
+        text-align: center;
+        padding: 22px;
+        font-size: 14px;
+    }
+
+    .
+whatsapp-flottant {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background: #25d366;
+        color: white;
+        padding: 13px 18px;
+        border-radius: 35px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 1000;
+    }
+
+    @media (max-width: 600px) {
+        header {
+            justify-content: center;
+            text-align: center;
+        }
+
+        nav {
+            justify-content: center;
+        }
+
+        .accueil {
+            padding: 75px 6%;
+        }
+
+        .accueil h1 {
+            font-size: 29px;
+        }
+
+        .titre {
+            font-size: 25px;
+        }
+    }
+
+/* ===== DEBUT FOND ANIME ===== */
+@keyframes degrade {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes flotte {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-30px) scale(1.08); }
+}
+
+.accueil {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, #0b1f4d, #1e3a8a, #0f766e, #1e3a8a);
+    background-size: 300% 300%;
+    animation: degrade 14s ease infinite;
+}
+.accueil::before,
+.accueil::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+}
+.accueil::before {
+    width: 260px; height: 260px;
+    background: rgba(245, 184, 0, 0.25);
+    top: -60px; left: -60px;
+    animation: flotte 9s ease-in-out infinite;
+}
+.accueil::after {
+    width: 200px; height: 200px;
+    background: rgba(255, 255, 255, 0.12);
+    bottom: -50px; right: 8%;
+    animation: flotte 11s ease-in-out infinite reverse;
+}
+.accueil > * { position: relative; z-index: 1; }
+
+/* Couleurs des écrits */
+.accueil h1 { color: #ffffff; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35); }
+.accueil p  { color: #e6eefc; }
+.carte h3   { color: #1e3a8a; }
+.carte p    { color: #475569; }
+.carte .lien { color: #0f766e; font-weight: 700; }
+.carte .lien:hover { color: #d97706; }
+
+@media (prefers-reduced-motion: reduce) {
+    .accueil, .accueil::before, .accueil::after { animation: none !important; }
+}
+/* ===== FIN FOND ANIME ===== */
+/* =====================================
+   MR TOUCHE SOLUTION - NEON GLOBAL
+===================================== */
+
+/* Textes bien visibles */
+body {
+    color: #ffffff;
+}
+
+h1, h2, h3, h4 {
+    color: #00eaff !important;
+    text-shadow: 0 0 8px #007bff,
+                 0 0 15px #00eaff;
+    animation: neonText 3s infinite alternate;
+}
+
+p {
+    color: #eaf5ff;
+}
+
+/* Toutes les images du site */
+img {
+    border: 3px solid #00eaff;
+    border-radius: 14px;
+    box-shadow: 0 0 10px #007bff,
+                0 0 20px #00eaff;
+    animation: neonImage 4s ease-in-out infinite;
+    transition: transform 0.4s;
+}
+
+img:hover {
+    transform: scale(1.04);
+}
+
+/* Cartes et blocs */
+.card, .carte, .service {
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 12px rgba(0,234,255,0.4);
+    transition: 0.4s;
+}
+
+.card:hover, .carte:hover, .service:hover {
+    box-shadow: 0 0 25px #00eaff;
+    transform: translateY(-5px);
+}
+
+/* Animation des textes */
+@keyframes neonText {
+    from {
+        text-shadow: 0 0 5px #007bff;
+    }
+    to {
+        text-shadow: 0 0 15px #00eaff,
+                     0 0 30px #007bff;
+    }
+}
+
+/* Animation des images */
+@keyframes neonImage {
+    0%, 100% {
+        box-shadow: 0 0 8px #007bff,
+                    0 0 15px #00eaff;
+    }
+    50% {
+        box-shadow: 0 0 20px #00eaff,
+                    0 0 35px #007bff;
+    }
+}/* ===================================== CORRECTION VISIBILITÉ - MR TOUCHE ===================================== */
+/* Fond général */ body { background: #eef5ff !important; color: #172b45 !important; }
+/* Tous les titres */ h1, h2, h3, h4, h5, h6 { color: #073b75 !important; text-shadow: 0 0 5px rgba(0, 180, 255, 0.25) !important; animation: none !important; }
+/* Tous les textes */ p, li, span, label { color: #24364b !important; }
+/* Liens */ a { color: #0759a8 !important; font-weight: 600; }
+a:hover { color: #008cff !important; }
+/* Cartes des services */ :is(.service-card, .service, .carte, .card, .service-item, article) { background: linear-gradient( 145deg, #ffffff, #eaf4ff ) !important;
+color: #172b45 !important;
+border: 1px solid #69caff !important;
+border-radius: 16px !important;
+
+box-shadow:
+    0 4px 15px rgba(0, 100, 200, 0.12),
+    0 0 8px rgba(0, 220, 255, 0.15);
+
+transition: 0.4s;
+}
+:is(.service-card, .service, .carte, .card, .service-item, article) p { color: #24364b !important; }
+:is(.service-card, .service, .carte, .card, .service-item, article) h3 { color: #073b75 !important; }
+/* Cadre NEON autour de toutes les images */ img { padding: 5px !important; background: linear-gradient( 135deg, #003b9b, #00dfff, #0066ff, #003b9b ) !important;
+background-size: 300% 300% !important;
+border: 0 !important;
+border-radius: 15px !important;
+
+box-shadow:
+    0 0 10px #008cff,
+    0 0 20px rgba(0, 220, 255, 0.6) !important;
+
+animation: cadreNeon 4s ease infinite !important;
+transition: transform 0.4s;
+}
+img:hover { transform: scale(1.03); }
+/* Animation du cadre */ @keyframes cadreNeon { 0% { background-position: 0% 50%; box-shadow: 0 0 8px #007bff; }
+50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 22px #00eaff;
+}
+
+100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 8px #007bff;
+}
+}
+/* Fond technologique discret */ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+background:
+    radial-gradient(
+        circle at 10% 20%,
+        rgba(0, 180, 255, 0.12),
+        transparent 35%
+    ),
+    radial-gradient(
+        circle at 90% 80%,
+        rgba(0, 100, 255, 0.10),
+        transparent 35%
+    );
+}
+/* Boutons */ button, .btn { background: #0759b5 !important; color: white !important; border-radius: 25px; box-shadow: 0 0 12px rgba(0, 150, 255, 0.5); }
+button:hover, .btn:hover { background: #008cff !important; }
+/* Menu */ nav a { color: #ffffff !important; }</style>
+<nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#apropos">À propos</a>
+    <a href="#services">Services</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#contact">Contact</a>
+</nav>
+<p>
+    Votre partenaire de confiance en technologie,
+    informatique, automobiles, formations et traduction.
+</p>
+
+<a href="#services" class="bouton">
+    Découvrir nos services
+</a>
+<div class="description">
+    <p>
+        MR TOUCHE SOLUTION est une entreprise multiservices
+        spécialisée dans les solutions technologiques,
+        informatiques, automobiles et éducatives.
+    </p>
+
+    <br>
+
+    <p>
+        Notre objectif est de proposer des services de qualité,
+        des solutions modernes et un accompagnement professionnel
+        à nos clients.
+    </p>
+</div>
+<div class="services">
+
+    <div class="carte">
+        <div class="icone">📱</div>
+        <h3>Déverrouillage de téléphones</h3>
+        <p>Assistance Android et iPhone, déverrouillage réseau et configuration des appareils compatibles.</p>
+        <a class="lien" href="services-details.html#deverrouillage">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">💻</div>
+        <h3>Installation Windows sur Mac</h3>
+        <p>Installation de Windows, antivirus, Microsoft Office et autres logiciels.</p>
+        <a class="lien" href="services-details.html#windows-mac">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🚗</div>
+        <h3>Vente de véhicules</h3>
+        <p>Véhicules neufs et d'occasion américains, japonais, européens et chinois.</p>
+        <a class="lien" href="services-details.html#vehicules">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🔧</div>
+        <h3>Pièces automobiles</h3>
+        <p>Recherche de pièces de rechange pour différentes marques et modèles.</p>
+        <a class="lien" href="services-details.html#pieces">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🖥️</div>
+        <h3>Formation informatique</h3>
+        <p>Formation sur ordinateur, utilisation des logiciels et compétences numériques.</p>
+        <a class="lien" href="#formation">En savoir plus →</a>
+    </div>
+
+    <div class="carte">
+        <div class="icone">🌍</div>
+        <h3>Langues et traduction</h3>
+        <p>Apprentissage de différentes langues et traduction de documents en ligne.</p>
+        <a class="lien" href="#langues">En savoir plus →</a>
+    </div>
+
+</div>
+<div class="detail" id="telephone">
+    <h3>📱 Déverrouillage Android et iPhone</h3>
+    <p>
+        Assistance pour Samsung, Xiaomi, OPPO, Vivo, Realme,
+        OnePlus et iPhone. Déverrouillage réseau sur appareils
+        compatibles appartenant à leurs propriétaires.
+    </p>
+</div>
+
+<div class="detail" id="windows">
+    <h3>💻 Installation de Windows sur Mac</h3>
+    <p>
+        Installation et configuration de Windows sur les Mac
+        compatibles, antivirus, Microsoft Office, mises à jour
+        et logiciels préférés.
+    </p>
+</div>
+
+<div class="detail" id="automobile">
+    <h3>🚗 Vente de véhicules neufs et d'occasion</h3>
+    <p>
+        Recherche de véhicules américains, japonais, européens
+        et chinois : voitures, SUV, pick-up, camions, bus et engins.
+        Accompagnement à l'achat et à l'importation.
+    </p>
+</div>
+
+<div class="detail" id="pieces">
+    <h3>🔧 Pièces de rechange automobiles</h3>
+    <p>
+Pièces moteur, freinage, suspension, filtres, huiles,
+        pneus, batteries, accessoires et éclairage.
+    </p>
+</div>
+
+<div class="detail" id="formation">
+    <h3>🖥️ Formation en informatique</h3>
+    <p>
+        Formation informatique sur ordinateur, utilisation des
+        logiciels et développement des compétences numériques.
+    </p>
+</div>
+
+<div class="detail" id="langues">
+    <h3>🌍 Apprentissage des langues et traduction</h3>
+    <p>
+        Apprentissage de différentes langues, accompagnement
+        linguistique et traduction de documents en ligne.
+    </p>
+</div>
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Prestations</th>
+            <th>Prix</th>
+        </tr>
+
+        <tr>
+            <td>Formation informatique</td>
+            <td class="prix">30 USD</td>
+        </tr>
+
+        <tr>
+            <td>Formation informatique mensuelle</td>
+            <td class="prix">30 USD / mois</td>
+        </tr>
+
+        <tr>
+            <td>Inscription informatique</td>
+            <td class="prix">20 USD</td>
+        </tr>
+
+        <tr>
+            <td>Apprentissage des langues</td>
+            <td class="prix">20 USD</td>
+        </tr>
+
+        <tr>
+            <td>Traduction de langues en ligne</td>
+            <td class="prix">20 USD</td>
+        </tr>
+
+        <tr>
+            <td>Inscription langues et traduction</td>
+            <td class="prix">20 USD</td>
+        </tr>
+
+        <tr>
+            <td>Tarif mensuel langues</td>
+            <td class="prix">20 USD / mois</td>
+        </tr>
+    </table>
+</div>
+
+<p class="description" style="margin-top:25px;">
+    Pour les véhicules et les pièces automobiles,
+    contactez-nous pour un devis personnalisé.
+</p>
+<p>
+    Besoin d'informations sur nos services ?
+    Écrivez-nous directement sur WhatsApp.
+</p>
+
+<div class="contact-numero">
+    +243 978 591 619
+</div>
+
+<a
+    href="https://wa.me/243978591619?text=Bonjour%20MR%20TOUCHE%20SOLUTION"
+    class="bouton"
+    target="_blank"
+    rel="noopener noreferrer">
+    Contacter sur WhatsApp
+</a>
