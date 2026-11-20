@@ -1,99 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MR TOUCHE SOLUTION - Services informatiques et automobiles</title>
-<meta property="og:type" content="website">
-<meta property="og:title" content="MR TOUCHE SOLUTION - Services informatiques et automobiles">
-<meta property="og:description" content="Déverrouillage de téléphones, installation Windows sur Mac, vente de véhicules et pièces automobiles.">
-<meta property="og:image" content="https://mrtouchesolution.netlify.app/images/apercu.jpg">
-<meta property="og:url" content="https://mrtouchesolution.netlify.app/">
 
-<!-- BLOCAGE : si la personne n’est pas connectée, on l’envoie vers la page de connexion -->
-<script>
-  if (!localStorage.getItem("mt_session") && !sessionStorage.getItem("mt_session")) {
-    location.replace("connexion.html");
-  }
-</script>
-
-<style>
-:root{--bleu:#087cff;--cyan:#00eaff;--or:#ffb400;--fond:#030817;--carte:#0a1d44;--texte:#e8f1ff}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{font-family:Arial,sans-serif;background:var(--fond);color:var(--texte);line-height:1.7}
-
-/* ===== MENU (toujours visible) ===== */
-header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:14px 6%;background:rgba(3,8,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(0,234,255,.35)}
-.logo{font-size:22px;font-weight:bold;color:#fff}.logo span{color:var(--or)}
-nav{display:flex;flex-wrap:wrap;gap:6px}
-nav a{color:#fff;text-decoration:none;font-weight:bold;font-size:14px;padding:8px 14px;border-radius:20px;transition:.3s}
-nav a:hover,nav a.actif{background:var(--or);color:#071b38}
-.deco{background:none;border:1px solid var(--or);color:var(--or);border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:bold}
-.deco:hover{background:var(--or);color:#071b38}
-
-/* ===== ACCUEIL ===== */
-.accueil{position:relative;overflow:hidden;min-height:540px;padding:100px 7%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-background:linear-gradient(120deg,#0b1f4d,#1e3a8a,#0f766e,#1e3a8a);background-size:300% 300%;animation:degrade 14s ease infinite}
-.accueil::before,.accueil::after{content:"";position:absolute;border-radius:50%}
-.accueil::before{width:260px;height:260px;background:rgba(255,180,0,.25);top:-60px;left:-60px;animation:flotte 9s ease-in-out infinite}
-.accueil::after{width:200px;height:200px;background:rgba(255,255,255,.12);bottom:-50px;right:8%;animation:flotte 11s ease-in-out infinite reverse}
-.accueil>*{position:relative;z-index:1}
-.accueil h1{font-size:42px;color:#fff;margin-bottom:18px;text-shadow:0 0 18px rgba(0,160,255,.6)}
-.accueil h1 span{display:block;color:var(--or)}
-.accueil p{max-width:700px;margin-bottom:28px;color:#e6eefc}
-.bouton{display:inline-block;background:var(--or);color:#071b38;padding:13px 26px;border-radius:30px;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:15px;transition:.3s}
-.bouton:hover{background:#fff;transform:translateY(-3px);box-shadow:0 0 20px var(--cyan)}
-@keyframes degrade{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
-@keyframes flotte{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.08)}}
-
-/* ===== SECTIONS ===== */
-section{padding:70px 7%}
-.titre{text-align:center;color:#fff;font-size:30px;margin-bottom:12px;text-shadow:0 0 14px rgba(0,160,255,.6)}
-.titre::after{content:"";display:block;width:70px;height:4px;margin:10px auto 30px;background:linear-gradient(90deg,var(--bleu),var(--cyan));border-radius:4px}
-.description{max-width:850px;margin:auto;text-align:center}
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
-.carte{background:var(--carte);border:1px solid rgba(0,234,255,.4);border-radius:16px;padding:25px;transition:.4s}
-.carte:hover{transform:translateY(-8px);box-shadow:0 0 25px rgba(0,180,255,.6)}
-.icone{font-size:38px;margin-bottom:10px}
-.carte h3{color:var(--cyan);margin-bottom:8px}
-.lien{display:inline-block;margin-top:12px;color:var(--or);font-weight:bold;text-decoration:none}
-.table-container{overflow-x:auto;background:var(--carte);border-radius:14px;padding:12px;border:1px solid rgba(0,234,255,.4)}
-table{width:100%;border-collapse:collapse;min-width:400px}
-th,td{padding:14px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left}
-th{background:#071b38;color:var(--or)}
-.prix{color:#3ee08f;font-weight:bold}
-
-/* ===== PAIEMENT MOBILE MONEY ===== */
-.paiement{background:#06122e}
-.operateurs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;max-width:900px;margin:0 auto 30px}
-.op{border:2px solid transparent;border-radius:16px;padding:20px 10px;text-align:center;font-weight:bold;cursor:pointer;transition:.3s;color:#fff;background:var(--carte)}
-.op b{display:block;font-size:30px;margin-bottom:4px}
-.op:hover{transform:translateY(-6px)}
-.op.choisi{border-color:#fff;box-shadow:0 0 22px currentColor;transform:scale(1.05)}
-.orange{color:#ff7900}.airtel{color:#ff2d2d}.mpesa{color:#2ecc40}.afri{color:#ffb400}
-.op span{color:#fff;font-size:15px}
-.formpay{max-width:520px;margin:auto;background:var(--carte);border:1px solid rgba(0,234,255,.4);border-radius:16px;padding:25px;display:grid;gap:14px}
-.formpay label{font-size:14px;font-weight:bold}
-.formpay input,.formpay select{width:100%;padding:12px;border-radius:10px;border:1px solid #29467f;background:#04122c;color:#fff;font-size:15px;margin-top:4px}
-#instructions{display:none;background:#04122c;border-left:4px solid var(--or);border-radius:10px;padding:14px;font-size:14px}
-
-/* ===== CONTACT ===== */
-.contact{background:#071b38;text-align:center}
-.contact-numero{font-size:26px;color:var(--or);font-weight:bold;margin:16px 0}
-footer{background:#041226;text-align:center;padding:22px;font-size:14px}
-.wa{position:fixed;right:20px;bottom:20px;background:#25d366;color:#fff;padding:13px 18px;border-radius:35px;text-decoration:none;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:1000;animation:pulse 2.2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.7)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
-
-/* ===== ANIMATION D’APPARITION AU DÉFILEMENT ===== */
-.reveal{opacity:0;transform:translateY(35px);transition:opacity .8s,transform .8s}
-.reveal.visible{opacity:1;transform:none}
-
-@media(max-width:600px){header{justify-content:center}nav{justify-content:center}.accueil h1{font-size:30px}.titre{font-size:25px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
-<body>
+<script type="module" src="./tracker.js"></script>
+
 
 <header>
   <div class="logo">MR TOUCHE <span>SOLUTION</span></div>
@@ -115,7 +24,7 @@ footer{background:#041226;text-align:center;padding:22px;font-size:14px}
 </div>
 
 <section id="apropos">
-  <h2 class="titre reveal">À propos</h2>
+[19/11/2026 14:16] Blais’by Officiel: <h2 class="titre reveal">À propos</h2>
   <div class="description reveal">
     <p>MR TOUCHE SOLUTION est une entreprise multiservices spécialisée dans les solutions technologiques, informatiques, automobiles et éducatives.</p><br>
     <p>Notre objectif est de proposer des services de qualité, des solutions modernes et un accompagnement professionnel à nos clients.</p>
@@ -172,7 +81,7 @@ footer{background:#041226;text-align:center;padding:22px;font-size:14px}
       </select></label></div>
     <div><label>Votre nom <input id="p_nom" placeholder="Ex : Jean Mukendi"></label></div>
     <div><label>Votre numéro Mobile Money <input id="p_tel" type="tel" placeholder="Ex : 0970000000"></label></div>
-    <button class="bouton" onclick="payer()">Payer maintenant</button>
+[19/11/2026 14:17] Blais’by Officiel: <button class="bouton" onclick="payer()">Payer maintenant</button>
     <div id="instructions"></div>
   </div>
 </section>
@@ -231,10 +140,67 @@ function payer() {
   window.open("https://wa.me/243978591619?text=" + encodeURIComponent(msg), "_blank");
 }
 
-function deconnexion() {
-  localStorage.removeItem("mt_session"); sessionStorage.removeItem("mt_session");
-  location.href = "connexion.html";
-}
 </script>
 </body>
 </html>
+[19/11/2026 14:17] Blais’by Officiel: <!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MR TOUCHE SOLUTION - Services informatiques et automobiles</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="MR TOUCHE SOLUTION - Services informatiques et automobiles">
+<meta property="og:description" content="Déverrouillage de téléphones, installation Windows sur Mac, vente de véhicules et pièces automobiles.">
+<meta property="og:image" content="https://mrtouchesolution.netlify.app/images/apercu.jpg">
+<meta property="og:url" content="https://mrtouchesolution.netlify.app/">
+
+<!-- BLOCAGE : page cachée tant que Firebase n’a pas confirmé la connexion -->
+<style>body{visibility:hidden}</style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+const auth = getAuth(initializeApp(firebaseConfig));
+onAuthStateChanged(auth, u => {
+  if (u) document.body.style.visibility = "visible";
+  else location.replace("connexion.html");
+});
+window.deconnexion = () => signOut(auth).then(() => location.href = "connexion.html");
+</script>
+<script>
+/* Si Firebase ne se charge pas, retour à la page de connexion qui explique le problème */
+document.querySelector('script[type="module"]').addEventListener("error", function () { location.replace("connexion.html"); });
+</script>
+
+<style>
+:root{--bleu:#087cff;--cyan:#00eaff;--or:#ffb400;--fond:#030817;--carte:#0a1d44;--texte:#e8f1ff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:Arial,sans-serif;background:var(--fond);color:var(--texte);line-height:1.7}
+
+/* ===== MENU (toujours visible) ===== */
+header{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:14px 6%;background:rgba(3,8,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(0,234,255,.35)}
+.logo{font-size:22px;font-weight:bold;color:#fff}.logo span{color:var(--or)}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{color:#fff;text-decoration:none;font-weight:bold;font-size:14px;padding:8px 14px;border-radius:20px;transition:.3s}
+nav a:hover,nav a.actif{background:var(--or);color:#071b38}
+.deco{background:none;border:1px solid var(--or);color:var(--or);border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:bold}
+.deco:hover{background:var(--or);color:#071b38}
+
+/* ===== ACCUEIL ===== */
+.accueil{position:relative;overflow:hidden;min-height:540px;padding:100px 7%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+background:linear-gradient(120deg,#0b1f4d,#1e3a8a,#0f766e,#1e3a8a);background-size:300% 300%;animation:degrade 14s ease infinite}
+.accueil::before,.accueil::after{content:"";position:absolute;border-radius:50%}
+.accueil::before{width:260px;height:260px;background:rgba(255,180,0,.25);top:-60px;left:-60px;animation:flotte 9s ease-in-out infinite}
+.accueil::after{width:200px;height:200px;background:rgba(255,255,255,.12);bottom:-50px;right:8%;animation:flotte 11s ease-in-out infinite reverse}
+.accueil>*{position:relative;z-index:1}
+.accueil h1{font-size:42px;color:#fff;margin-bottom:18px;text-shadow:0 0 18px rgba(0,160,255,.6)}
+.accueil h1 span{display:block;color:var(--or)}
+.accueil p{max-width:700px;margin-bottom:28px;color:#e6eefc}
+.bouton{display:inline-block;background:var(--or);color:#071b38;padding:13px 26px;border-radius:30px;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:15px;transition:.3s}
+.bouton:hover{background:#fff;transform:translateY(-3px);box-shadow:0 0 20px var(--cyan)}
+@keyframes degrade{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+@keyframes flotte{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.08)}}
+
+/* ===== SECTIONS ===== */

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — Mr Touche Solution</title>
+<style>
+  :root { --bg:#10181b; --panel:#182328; --line:#26343a; --text:#e8efe9; --muted:#8fa3a3; --accent:#f2b84b; --ok:#4fd18b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Georgia,"Times New Roman",serif; background:var(--bg); color:var(--text); }
+  header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:5; }
+  h1 { font-size:1.15rem; margin:0; font-weight:600; }
+  h2 { font-size:1rem; margin:0 0 10px; font-weight:600; }
+  main { max-width:960px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .stat b { display:block; font-size:1.9rem; color:var(--ok); }
+  .stat span { color:var(--muted); font-size:.85rem; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:400; }
+  .wrap { overflow-x:auto; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--ok); margin-right:6px; }
+  .muted { color:var(--muted); }
+  input, button { font:inherit; padding:10px 12px; border-radius:8px; border:1px solid var(--line); background:#0d1417; color:var(--text); }
+  button { background:var(--accent); color:#1a1200; border:0; cursor:pointer; font-weight:600; }
+  button.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+  button:focus-visible, input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  #login { max-width:360px; margin:12vh auto; display:grid; gap:10px; padding:16px; }
+  .hidden { display:none !important; }
+  .err { color:#ff8b7a; min-height:1.2em; }
+  .bell { position:relative; background:transparent; border:1px solid var(--line); color:var(--text); font-size:1.2rem; padding:6px 12px; }
+  .bell .n { position:absolute; top:-6px; right:-6px; background:var(--accent); color:#1a1200; font-size:.72rem; font-weight:700; border-radius:10px; padding:1px 6px; }
+  .bell.ring { animation:ring .6s; }
+  @keyframes ring { 0%,100%{transform:rotate(0)} 20%{transform:rotate(18deg)} 40%{transform:rotate(-16deg)} 60%{transform:rotate(10deg)} 80%{transform:rotate(-6deg)} }
+  #toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--accent); color:#1a1200; padding:12px 16px; border-radius:10px; font-weight:600; max-width:90vw; }
+  @media (prefers-reduced-motion:reduce){ .bell.ring{animation:none} }
+</style>
+</head>
+<body>
+
+<section id="login" class="panel">
+  <h1>Espace administrateur</h1>
+  <input id="email" type="email" placeholder="Email admin" autocomplete="username">
+  <input id="pass" type="password" placeholder="Mot de passe" autocomplete="current-password">
+  <button id="btnLogin">Se connecter</button>
+  <div class="err" id="err"></div>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <h1>Tableau de bord</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="bell" id="bell" title="Notifications" aria-label="Notifications">🔔<span class="n hidden" id="badge">0</span></button>
+      <button class="ghost" id="btnOut">Déconnexion</button>
+    </div>
+  </header>
+  <main>
+    <div class="panel stats">
+      <div class="stat"><b id="sOnline">0</b><span>En ligne</span></div>
+      <div class="stat"><b id="sMembers">0</b><span>Connectés (compte)</span></div>
+      <div class="stat"><b id="sViews">0</b><span>Pages vues (50 dernières)</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>En ce moment sur le site</h2>
+      <div class="wrap"><table>
+        <thead><tr><th>Qui</th><th>Page</th><th>Appareil</th><th>Arrivé à</th></tr></thead>
+        <tbody id="presence"><tr><td colspan="4" class="muted">Personne pour l'instant.</td></tr></tbody>
+      </table></div>
+    </div>
+
+    <div class="panel">
+      <h2>Activité récente</h2>
+      <div class="wrap"><table>
+        <thead><tr><th>Heure</th><th>Événement</th><th>Qui</th><th>Page</th></tr></thead>
+        <tbody id="events"></tbody>
+      </table></div>
+    </div>
+  </main>
+</div>
+<div id="toast" class="hidden"></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, query, orderByChild, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+// ⚠️ MET ICI TON EMAIL ADMIN (le même que dans les règles)
+const ADMIN_EMAIL = "benganabalise@gmail.com";
+// ⚠️ Même URL que dans tracker.js
+const DB_URL = "https://mrtouchesolution-default-rtdb.firebaseio.com";
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app, DB_URL);
+const $ = (id) => document.getElementById(id);
+
+let unsubs = [], unread = 0, seen = null;
+
+$("btnLogin").onclick = async () => {
+  $("err").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pass").value); }
+  catch { $("err").textContent = "Email ou mot de passe incorrect."; }
+};
+$("btnOut").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, (u) => {
+  unsubs.forEach((f) => f()); unsubs = []; seen = null;
+  if (u && u.email === ADMIN_EMAIL) {
+    $("login").classList.add("hidden"); $("app").classList.remove("hidden");
+    if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+    start();
+  } else {
+    $("app").classList.add("hidden"); $("login").classList.remove("hidden");
+    if (u && !u.isAnonymous) { $("err").textContent = "Ce compte n'est pas administrateur."; signOut(auth); }
+  }
+});
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const hour = (t) => t ? new Date(t).toLocaleTimeString("fr-FR", { hour:"2-digit", minute:"2-digit" }) : "";
+const who = (r) => r.email ? esc(r.email) : "Visiteur anonyme";
+
+function start() {
+  unsubs.push(onValue(ref(db, "presence"), (snap) => {
+    const rows = Object.values(snap.val() || {}).sort((a, b) => (b.since || 0) - (a.since || 0));
+    $("sOnline").textContent = rows.length;
+    $("sMembers").textContent = rows.filter((r) => r.email).length;
+    $("presence").innerHTML = rows.length
+      ? rows.map((r) => `<tr><td><span class="dot"></span>${who(r)}</td><td>${esc(r.page)}</td><td>${esc(r.device)}</td><td>${hour(r.since)}</td></tr>`).join("")
+      : `<tr><td colspan="4" class="muted">Personne pour l'instant.</td></tr>`;
+  }));
+
+  unsubs.push(onValue(query(ref(db, "events"), orderByChild("ts"), limitToLast(50)), (snap) => {
+    const list = [];
+    snap.forEach((c) => { list.push({ key: c.key, ...c.val() }); });
+    list.reverse();
+    $("sViews").textContent = list.filter((r) => r.type === "pageview").length;
+    $("events").innerHTML = list.map((r) =>
+      `<tr><td>${hour(r.ts)}</td><td>${r.type === "login" ? "🔑 Connexion" : "👁 Visite"}</td><td>${who(r)}</td><td>${esc(r.page)}</td></tr>`).join("");
+    if (seen) list.filter((r) => !seen.has(r.key) && r.type === "login")
+      .forEach((r) => notify(`${r.email || "Quelqu'un"} vient de se connecter`));
+    seen = new Set(list.map((r) => r.key));
+  }));
+}
+
+function notify(msg) {
+  unread++; $("badge").textContent = unread; $("badge").classList.remove("hidden");
+  $("bell").classList.remove("ring"); void $("bell").offsetWidth; $("bell").classList.add("ring");
+  $("toast").textContent = "🔔 " + msg; $("toast").classList.remove("hidden");
+  setTimeout(() => $("toast").classList.add("hidden"), 5000);
+  beep();
+  if ("Notification" in window && Notification.permission === "granted") new Notification("Mr Touche Solution", { body: msg });
+}
+$("bell").onclick = () => { unread = 0; $("badge").classList.add("hidden"); };
+
+function beep() {
+  try {
+    const c = new (window.AudioContext || window.webkitAudioContext)(), o = c.createOscillator(), g = c.createGain();
+    o.connect(g); g.connect(c.destination); o.frequency.value = 880; g.gain.value = 0.15;
+    o.start(); o.stop(c.currentTime + 0.25);
+  } catch {}
+}
+</script>
+</body>
+</html>
