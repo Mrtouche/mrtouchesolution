@@ -1,0 +1,115 @@
+[20/11/2026 14:54] Blais’by Officiel: /* style-pro.css — mise en forme professionnelle pour index.html
+   Se charge APRÈS le <style> existant pour le compléter, sans toucher au JavaScript ni au contenu. */
+
+html { scroll-behavior: smooth; }
+body { line-height: 1.65; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img { max-width: 100%; height: auto; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .op:focus-visible {
+  outline: 2px solid var(--cyan); outline-offset: 3px;
+}
+
+/* ===== En-tête ===== */
+header {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 14px max(5%, calc((100% - 1160px) / 2));
+  border-bottom: 1px solid rgba(0, 234, 255, .18);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+header .logo { font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+nav#menu { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+nav#menu a {
+  padding: 8px 14px; border-radius: 999px; text-decoration: none;
+  font-weight: 600; font-size: .95rem; color: #dce6ff; transition: background .25s, color .25s;
+}
+nav#menu a:hover { background: rgba(0, 234, 255, .12); color: #fff; }
+.deco {
+  padding: 9px 20px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .28);
+  background: transparent; color: #fff; font-weight: 600; cursor: pointer;
+  white-space: nowrap; transition: background .25s, border-color .25s;
+}
+.deco:hover { background: #e5484d; border-color: #e5484d; }
+
+/* ===== Accueil ===== */
+.accueil {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; min-height: 78vh; padding: 90px 7% 70px; text-align: center;
+}
+.accueil h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.1; letter-spacing: -.01em; }
+.accueil p { max-width: 640px; margin: 0 auto; font-size: 1.1rem; color: #c9d6f2; }
+.accueil a {
+  display: inline-block; margin-top: 10px; padding: 14px 32px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--bleu), var(--cyan)); color: #04122c;
+  font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px rgba(0, 160, 255, .35);
+  transition: transform .25s, box-shadow .25s;
+}
+.accueil a:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 180, 255, .5); }
+
+/* ===== Sections : contenu centré, fonds pleine largeur ===== */
+section { padding: 84px max(6%, calc((100% - 1160px) / 2)); }
+.titre { font-size: clamp(1.7rem, 4vw, 2.3rem); margin-bottom: 14px; }
+.titre::after { width: 64px; margin: 14px auto 36px; }
+.description { max-width: 780px; margin: 0 auto 14px; font-size: 1.05rem; color: #c9d6f2; }
+
+/* ===== Services ===== */
+.services { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: stretch; }
+.carte { display: flex; flex-direction: column; padding: 28px; text-align: left; }
+.icone {
+  display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 16px;
+  border-radius: 16px; background: rgba(0, 234, 255, .1); font-size: 32px;
+}
+.carte h3 { margin: 0 0 8px; font-size: 1.2rem; }
+.carte p { flex: 1; margin: 0; color: #c9d6f2; }
+.lien { align-self: flex-start; margin-top: auto; padding-top: 16px; }
+
+/* ===== Tarifs ===== */
+.table-container { max-width: 860px; margin: 0 auto; padding: 0; border-radius: 16px; }
+table { min-width: 0; }
+th { font-size: .95rem; }
+th, td { padding: 16px 22px; }
+th:last-child, td:last-child { text-align: right; white-space: nowrap; }
+tbody tr:nth-child(even) td { background: rgba(255, 255, 255, .03); }
+tbody tr:hover td { background: rgba(0, 234, 255, .07); }
+tbody tr:last-child td { border-bottom: 0; }
+.table-container + p { max-width: 860px; margin: 22px auto 0; text-align: center; color: #c9d6f2; }
+
+/* ===== Paiement Mobile Money ===== */
+.operateurs { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto 36px; }
+.op { padding: 22px 10px; border: 2px solid rgba(255, 255, 255, .08); }
+.formpay { max-width: 520px; padding: 30px; gap: 16px; box-shadow: 0 18px 50px rgba(0, 0, 0, .35); }
+.
+[20/11/2026 14:54] Blais’by Officiel: formpay label { display: grid; gap: 6px; }
+.formpay input, .formpay select { padding: 14px; border-radius: 12px; border: 1px solid rgba(0, 234, 255, .3); }
+.formpay button {
+  padding: 15px; border: 0; border-radius: 12px; cursor: pointer;
+  background: linear-gradient(90deg, var(--bleu), var(--cyan)); color: #04122c;
+  font-size: 1rem; font-weight: 700; transition: transform .25s, box-shadow .25s;
+}
+.formpay button:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0, 160, 255, .4); }
+
+/* ===== Contact ===== */
+.contact { text-align: center; }
+.contact-numero {
+  display: inline-block; margin: 14px 0; padding: 14px 28px; font-size: clamp(1.4rem, 4vw, 1.9rem);
+  border: 1px solid rgba(240, 178, 74, .35); border-radius: 14px;
+}
+.contact a:not(.wa) {
+  display: inline-block; margin-top: 6px; padding: 14px 30px; border-radius: 999px;
+  background: #25d366; color: #fff; font-weight: 700; text-decoration: none;
+  transition: transform .25s, box-shadow .25s;
+}
+.contact a:not(.wa):hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(37, 211, 102, .4); }
+
+/* ===== Pied de page ===== */
+footer { padding: 28px 6%; border-top: 1px solid rgba(0, 234, 255, .15); color: #9fb2d6; }
+
+/* ===== Mobile ===== */
+@media (max-width: 760px) {
+  header { flex-direction: column; gap: 10px; padding: 12px 4%; }
+  nav#menu { justify-content: center; gap: 2px; }
+  nav#menu a { padding: 6px 10px; font-size: .85rem; }
+  section { padding: 64px 6%; }
+  .accueil { min-height: auto; padding: 70px 6% 56px; }
+  .services { grid-template-columns: 1fr; }
+  th, td { padding: 12px 14px; font-size: .92rem; }
+  .formpay { padding: 22px; }
+}
