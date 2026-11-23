@@ -10,8 +10,8 @@
     <a href="#accueil">Accueil</a>
     <a href="#apropos">À propos</a>
     <a href="#services">Services</a>
-    <a href="#tarifs">Tarifs</a>
-    <a href="#paiement">Paiement</a>
+<a href="boutique.html">Boutique</a>    
+<a href="#paiement">Paiement</a>
     <a href="#contact">Contact</a>
   </nav>
   <button class="deco" onclick="deconnexion()">Déconnexion</button>
@@ -42,21 +42,6 @@
     <div class="carte reveal"><div class="icone">🌍</div><h3>Langues et traduction</h3><p>Apprentissage de différentes langues et traduction de documents en ligne.</p><a class="lien" href="services-details.html#langues">En savoir plus →</a></div>
   </div>
 </section>
-
-<section id="tarifs">
-  <h2 class="titre reveal">Tarifs</h2>
-  <div class="table-container reveal">
-    <table>
-      <tr><th>Prestations</th><th>Prix</th></tr>
-      <tr><td>Formation informatique</td><td class="prix">30 USD</td></tr>
-      <tr><td>Formation informatique mensuelle</td><td class="prix">30 USD / mois</td></tr>
-      <tr><td>Inscription informatique</td><td class="prix">20 USD</td></tr>
-      <tr><td>Apprentissage des langues</td><td class="prix">20 USD</td></tr>
-      <tr><td>Traduction de langues en ligne</td><td class="prix">20 USD</td></tr>
-      <tr><td>Inscription langues et traduction</td><td class="prix">20 USD</td></tr>
-      <tr><td>Tarif mensuel langues</td><td class="prix">20 USD / mois</td></tr>
-    </table>
-  </div>
   <p class="description reveal" style="margin-top:25px">Pour les véhicules et les pièces automobiles, contactez-nous pour un devis personnalisé.</p>
 </section>
 
@@ -93,15 +78,17 @@
   <a class="bouton reveal" href="https://wa.me/243978591619?text=Bonjour%20MR%20TOUCHE%20SOLUTION" target="_blank" rel="noopener noreferrer">Contacter sur WhatsApp</a>
 </section>
 
-<footer>© 2026 MR TOUCHE SOLUTION – Tous droits réservés</footer>
+<footer>© 2026 MR TOUCHE SOLUTION – Tous droits réservés
+  <p style="margin:10px 0 0"><a href="confidentialite.html" style="color:#00eaff">Confidentialité</a> · <a href="conditions.html" style="color:#00eaff">Conditions</a></p>
+</footer>
 <a class="wa" href="https://wa.me/243978591619" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
 
 <script>
 /* ===== À MODIFIER : vos numéros de réception par opérateur ===== */
 const NUMEROS = {
-  "Orange Money": "+243 978 591 619",
+  "Orange Money": "+243 802 690 858",
   "Airtel Money": "+243 978 591 619",
-  "M-Pesa":       "+243 978 591 619",
+  "M-Pesa":       "+243 817 854 562",
   "Afrimoney":    "+243 978 591 619"
 };
 
@@ -141,19 +128,22 @@ function payer() {
 }
 
 </script>
-</body>
+<script src="./cookies.js" defer></script></body>
 </html>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MR TOUCHE SOLUTION - Services informatiques et automobiles</title>
+<title>MR TOUCHE SOLUTION – Informatique, téléphones et automobiles</title>
+<meta name="description" content="Déverrouillage de téléphones, installation Windows, véhicules, pièces auto, formations, langues et traduction. Paiement Mobile Money.">
+<link rel="canonical" href="https://mrtouchesolution.netlify.app/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MR TOUCHE SOLUTION - Services informatiques et automobiles">
-<meta property="og:description" content="Déverrouillage de téléphones, installation Windows sur Mac, vente de véhicules et pièces automobiles.">
+<meta property="og:title" content="MR TOUCHE SOLUTION">
+<meta property="og:description" content="Services informatiques et automobiles, paiement Mobile Money.">
 <meta property="og:image" content="https://mrtouchesolution.netlify.app/images/apercu.jpg">
-<meta property="og:url" content="https://mrtouchesolution.netlify.app/">
+<meta name="twitter:card" content="summary_large_image">
 
 <!-- BLOCAGE : page cachée tant que Firebase n’a pas confirmé la connexion -->
 <style>body{visibility:hidden}</style>

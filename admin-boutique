@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin boutique — Mr Touche Solution</title>
+<style>
+  :root { --bg:#10181b; --panel:#182328; --line:#26343a; --text:#e8efe9; --muted:#8fa3a3; --accent:#f2b84b; --ok:#4fd18b; --bad:#ff8b7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,Segoe UI,Arial,sans-serif; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); }
+  header a { color:var(--accent); text-decoration:none; font-weight:600; }
+  h1 { margin:0; font-size:1.15rem; } h2 { margin:0 0 12px; font-size:1rem; }
+  main { max-width:760px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  label { display:block; margin:12px 0 6px; font-size:.9rem; color:var(--muted); }
+  input, select, textarea, button { width:100%; font:inherit; padding:11px 12px; border-radius:8px; border:1px solid var(--line); background:#0d1417; color:var(--text); }
+  textarea { min-height:80px; resize:vertical; }
+  button { background:var(--accent); color:#1a1200; border:0; font-weight:700; cursor:pointer; margin-top:16px; }
+  button:disabled { opacity:.6; cursor:wait; }
+  button.del { width:auto; margin:0; padding:8px 12px; background:transparent; color:var(--bad); border:1px solid var(--bad); }
+  #preview { display:none; width:100%; max-height:240px; object-fit:contain; margin-top:10px; border-radius:8px; }
+  .row { display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line); }
+  .row img { width:64px; height:64px; object-fit:cover; border-radius:8px; background:#0d1417; flex:none; }
+  .row div { flex:1; min-width:0; } .row small { color:var(--muted); display:block; }
+  .hidden { display:none !important; }
+  #login { max-width:360px; margin:12vh auto; display:grid; gap:10px; }
+  #login input { margin:0; }
+  .err { color:var(--bad); min-height:1.2em; } .ok { color:var(--ok); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+</head>
+<body>
+<section id="login" class="panel">
+  <h1>Admin boutique</h1>
+  <input id="email" type="email" placeholder="Email admin" autocomplete="username">
+  <input id="pass" type="password" placeholder="Mot de passe" autocomplete="current-password">
+  <button id="btnLogin" style="margin:0">Se connecter</button>
+  <div class="err" id="err"></div>
+</section>
+
+<div id="app" class="hidden">
+  <header><h1>Boutique — articles</h1><a href="admin.html">← Tableau de bord</a></header>
+  <main>
+    <div class="panel">
+      <h2>Ajouter un article</h2>
+      <label for="cat">Catégorie</label>
+      <select id="cat">
+        <option value="pieces">Pièces automobiles</option>
+        <option value="vehicules">Véhicules</option>
+        <option value="telephones">Téléphones</option>
+        <option value="windows">Windows et Mac</option>
+        <option value="formation">Formations</option>
+        <option value="langues">Langues</option>
+      </select>
+      <label for="name">Nom de l’article</label>
+      <input id="name" type="text" maxlength="80" placeholder="Ex. : Plaquettes de frein Toyota Corolla">
+      <label for="price">Prix en USD (laisser vide = sur devis)</label>
+      <input id="price" type="number" min="0" step="0.01" inputmode="decimal">
+      <label for="desc">Description</label>
+      <textarea id="desc" maxlength="300" placeholder="Marque, état, compatibilité…"></textarea>
+      <label for="photo">Photo</label>
+      <input id="photo" type="file" accept="image/*">
+      <img id="preview" alt="Aperçu">
+      <button id="save">Publier l’article</button>
+      <div id="status" class="err"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Articles publiés</h2>
+<div id="list"><span style="color:var(--muted)">Aucun article pour l’instant.</span></div>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, push, set, get, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const ADMIN_EMAIL = "benganabalise@gmail.com";
+const DB_URL = "https://mrtouchesolution-default-rtdb.firebaseio.com";
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app, DB_URL);
+const $ = (id) => document.getElementById(id);
+const LABELS = { pieces:"Pièces automobiles", vehicules:"Véhicules", telephones:"Téléphones", windows:"Windows et Mac", formation:"Formations", langues:"Langues" };
+let unsub = null, photoData = null;
+
+$("btnLogin").onclick = async () => {
+  $("err").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pass").value); }
+  catch { $("err").textContent = "Email ou mot de passe incorrect."; }
+};
+
+onAuthStateChanged(auth, (u) => {
+  if (unsub) { unsub(); unsub = null; }
+  if (u && u.email === ADMIN_EMAIL) {
+    $("login").classList.add("hidden"); $("app").classList.remove("hidden");
+    unsub = onValue(ref(db, "products"), (snap) => drawList(snap));
+  } else { $("app").classList.add("hidden"); $("login").classList.remove("hidden"); }
+});
+
+// Réduit la photo (800 px max) pour qu’elle charge vite et reste légère
+function resize(file) {
+  return new Promise((ok, ko) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const k = Math.min(1, 800 / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); ok(c.toDataURL("image/jpeg", 0.72));
+    };
+    img.onerror = () => ko(new Error("Photo illisible"));
+    img.src = url;
+  });
+}
+
+$("photo").onchange = async (e) => {
+  const f = e.target.files[0]; photoData = null; $("preview").style.display = "none";
+  if (!f) return;
+  try { photoData = await resize(f); $("preview").src = photoData; $("preview").style.display = "block"; }
+  catch { $("status").className = "err"; $("status").textContent = "Cette photo ne peut pas être lue. Essayez un fichier JPG ou PNG."; }
+};
+
+$("save").onclick = async () => {
+  const name = $("name").value.trim(), st = $("status");
+  st.className = "err"; st.textContent = "";
+  if (!name) return (st.textContent = "Entrez le nom de l’article.");
+  if (!photoData) return (st.textContent = "Ajoutez une photo.");
+  $("save").disabled = true;
+  try {
+    const id = push(ref(db, "products")).key;
+    await set(ref(db, "productImages/" + id), photoData);
+    await set(ref(db, "products/" + id), { cat: $("cat").value, name, price: Number($("price").value) || 0, desc: $("desc").value.trim(), ts: serverTimestamp() });
+    ["name", "price", "desc", "photo"].forEach((k) => ($(k).value = ""));
+    photoData = null; $("preview").style.display = "none";
+    st.className = "ok"; st.textContent = "Article publié ✔";
+  } catch { st.textContent = "Échec de l’envoi. Vérifiez les règles Firebase et votre connexion."; }
+  $("save").disabled = false;
+};
+
+function drawList(snap) {
+  const rows = [];
+  snap.forEach((c) => { rows.push({ id: c.key, ...c.val() }); });
+  rows.sort((a, b) => (b.ts  0) - (a.ts  0));
+  const box = $("list");
+  if (!rows.length) { box.textContent = "Aucun article pour l’instant."; return; }
+  box.replaceChildren(...rows.map((r) => {
+    const row = document.createElement("div"); row.className = "row";
+    const img = document.createElement("img"); img.alt = "";
+get(ref(db, "productImages/" + r.id)).then((s) => { if (s.val()) img.src = s.val(); });
+    const d = document.createElement("div");
+    const t = document.createElement("strong"); t.textContent = r.name;
+    const s = document.createElement("small"); s.textContent = (LABELS[r.cat] || r.cat) + " · " + (r.price ? r.price + " USD" : "Sur devis");
+    d.append(t, s);
+    const del = document.createElement("button"); del.className = "del"; del.textContent = "Supprimer";
+    del.onclick = async () => {
+      if (!confirm("Supprimer « " + r.name + " » ?")) return;
+      await remove(ref(db, "products/" + r.id)); await remove(ref(db, "productImages/" + r.id));
+    };
+    row.append(img, d, del); return row;
+  }));
+}
+</script>
+</body>
+</html>

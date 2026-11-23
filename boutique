@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boutique — Mr Touche Solution</title>
+<style>
+  :root { --bg:#04122c; --panel:#0a2347; --line:rgba(0,234,255,.25); --cyan:#00eaff; --blue:#00a0ff; --text:#eef3ff; --muted:#a9b8d6; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,Segoe UI,Arial,sans-serif; line-height:1.5; }
+  header { position:sticky; top:0; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 5%; background:rgba(4,18,44,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  header a { color:var(--cyan); text-decoration:none; font-weight:600; }
+  h1 { margin:0; font-size:1.25rem; }
+  main { max-width:1160px; margin:0 auto; padding:28px 5% 90px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+  .chips button { padding:9px 16px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--text); font:inherit; font-weight:600; cursor:pointer; }
+  .chips button.on { background:linear-gradient(90deg,var(--blue),var(--cyan)); color:#04122c; border-color:transparent; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:22px; }
+  .item { display:flex; flex-direction:column; background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .ph { aspect-ratio:4/3; display:grid; place-items:center; background:#06183a; color:var(--muted); cursor:zoom-in; }
+  .ph img { width:100%; height:100%; object-fit:cover; }
+  .b { display:flex; flex-direction:column; gap:6px; flex:1; padding:16px; }
+  .b h3 { margin:0; font-size:1.05rem; }
+  .b p { margin:0; flex:1; color:var(--muted); font-size:.92rem; }
+  .price { color:#3ee08f; font-weight:800; font-size:1.15rem; }
+  .order { display:block; margin-top:8px; padding:12px; border-radius:10px; background:#25d366; color:#fff; font-weight:700; text-align:center; text-decoration:none; }
+  #empty { padding:50px 0; text-align:center; color:var(--muted); }
+  #zoom { position:fixed; inset:0; z-index:20; display:none; place-items:center; padding:20px; background:rgba(0,0,0,.85); cursor:zoom-out; }
+  #zoom.on { display:grid; }
+  #zoom img { max-width:100%; max-height:90vh; border-radius:12px; }
+  .tarifs { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:26px; }
+  .tarifs h2 { margin:0 0 12px; font-size:1.15rem; color:var(--cyan); }
+  .tarifs table { width:100%; border-collapse:collapse; }
+  .tarifs td { padding:12px 6px; border-bottom:1px solid rgba(255,255,255,.1); }
+  .tarifs tr:last-child td { border-bottom:0; }
+  .tarifs td:last-child { text-align:right; white-space:nowrap; font-weight:800; color:#3ee08f; }
+  .tarifs .order { max-width:320px; margin-top:16px; }
+  a:focus-visible, button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+</style>
+</head>
+<script src="./cookies.js" defer></script><body>
+<header>
+  <h1>🛒 Boutique</h1>
+  <a href="index.html">← Retour au site</a>
+</header>
+<main>
+  <div class="chips" id="chips"></div>
+  <div id="tarifs"></div>
+  <div class="grid" id="grid"></div>
+  <div id="empty" hidden></div>
+</main>
+<div id="zoom"><img alt=""></div>
+
+<script type="module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const DB_URL = "https://mrtouchesolution-default-rtdb.firebaseio.com";
+const WA = "243978591619";
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app, DB_URL);
+const $ = (id) => document.getElementById(id);
+const CATS = { tous:"Tous", telephones:"Téléphones", windows:"Windows et Mac", vehicules:"Véhicules", pieces:"Pièces automobiles", formation:"Formations", langues:"Langues" };
+const TARIFS = {
+  formation: [["Formation informatique", "30 USD"], ["Formation informatique mensuelle", "30 USD / mois"], ["Inscription informatique", "20 USD"]],
+  langues: [["Apprentissage des langues", "20 USD"], ["Traduction de langues en ligne", "20 USD"], ["Inscription langues et traduction", "20 USD"], ["Tarif mensuel langues", "20 USD / mois"]]
+};
+function drawTarifs() {
+  const box = $("tarifs"), rows = TARIFS[cat];
+  if (!rows) { box.replaceChildren(); return; }
+  const wrap = document.createElement("div"); wrap.className = "tarifs";
+  const h = document.createElement("h2"); h.textContent = "Tarifs — " + CATS[cat];
+  const t = document.createElement("table");
+  rows.forEach(([n, p]) => { const tr = t.insertRow(); tr.insertCell().textContent = n; tr.insertCell().textContent = p; });
+  const a = document.createElement("a"); a.className = "order"; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "S’inscrire sur WhatsApp";
+  a.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Bonjour, je souhaite des informations sur : " + CATS[cat] + ".");
+  wrap.append(h, t, a); box.replaceChildren(wrap);
+}
+let cat = new URLSearchParams(location.search).get("cat");
+if (!CATS[cat]) cat = "tous";
+let items = [], started = false;
+const imgCache = new Map();
+
+function drawChips() {
+  $("chips").innerHTML = "";
+  for (const [k, label] of Object.entries(CATS)) {
+    const b = document.createElement("button");
+    b.textContent = label; b.className = k === cat ? "on" : "";
+    b.onclick = () => { cat = k; history.replaceState(null, "", "?cat=" + k); drawChips(); render(); };
+    $("chips").append(b);
+  }
+  drawTarifs();
+}
+
+function card(it) {
+  const el = document.createElement("article"); el.className = "item";
+  const ph = document.createElement("div"); ph.className = "ph"; ph.textContent = "Chargement…";
+  const b = document.createElement("div"); b.className = "b";
+  const h = document.createElement("h3"); h.textContent = it.name;
+  const p = document.createElement("p"); p.textContent = it.desc || "";
+  const pr = document.createElement("div"); pr.className = "price";
+  pr.textContent = it.price ? Number(it.price).toLocaleString("fr-FR") + " USD" : "Sur devis";
+  const o = document.createElement("a"); o.className = "order"; o.target = "_blank"; o.rel = "noopener";
+  o.textContent = "Commander sur WhatsApp";
+  o.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent("Bonjour, je suis intéressé par : " + it.name + (it.price ? " (" + it.price + " USD)" : ""));
+  b.append(h, p, pr, o); el.append(ph, b);
+
+  const show = (src) => {
+    if (!src) { ph.textContent = "Pas de photo"; return; }
+    const img = document.createElement("img"); img.src = src; img.alt = it.name; img.loading = "lazy";
+    ph.textContent = ""; ph.append(img);
+    ph.onclick = () => { $("zoom").querySelector("img").src = src; $("zoom").classList.add("on"); };
+  };
+  if (imgCache.has(it.id)) show(imgCache.get(it.id));
+  else get(ref(db, "productImages/" + it.id)).then((s) => { imgCache.set(it.id, s.val()); show(s.val()); }).catch(() => show(null));
+  return el;
+}
+
+function render() {
+  const list = items.filter((i) => cat === "tous" || i.cat === cat);
+  $("grid").replaceChildren(...list.map(card));
+  $("empty").hidden = list.length > 0;
+  $("empty").textContent = "Aucun article dans cette catégorie pour le moment. Écrivez-nous sur WhatsApp pour connaître les disponibilités.";
+}
+
+$("zoom").onclick = () => $("zoom").classList.remove("on");
+drawChips();
+
+// Le suivi (tracker.js) connecte le visiteur en anonyme ; on attend simplement qu'il soit prêt
+onAuthStateChanged(auth, (u) => {
+  if (!u || started) return;
+  started = true;
+  onValue(ref(db, "products"), (snap) => {
+    items = [];
+    snap.forEach((c) => { items.push({ id: c.key, ...c.val() }); });
+    items.sort((a, b) => (b.ts  0) - (a.ts  0));
+    render();
+  }, () => { $("empty").hidden = false; $("empty").
+textContent = "Impossible de charger la boutique pour le moment."; });
+});
+</script>
+<script type="module" src="./tracker.js"></script>
+</body>
+</html>
