@@ -137,7 +137,7 @@ onAuthStateChanged(auth, (u) => {
   onValue(ref(db, "products"), (snap) => {
     items = [];
     snap.forEach((c) => { items.push({ id: c.key, ...c.val() }); });
-    items.sort((a, b) => (b.ts  0) - (a.ts  0));
+    items.sort((a, b) => (b.ts > 0 ? b.ts : 0) - (a.ts > 0 ? a.ts : 0));
     render();
   }, () => { $("empty").hidden = false; $("empty").
 textContent = "Impossible de charger la boutique pour le moment."; });

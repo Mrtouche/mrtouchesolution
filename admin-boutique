@@ -69,7 +69,7 @@
 
     <div class="panel">
       <h2>Articles publiés</h2>
-<div id="list"><span style="color:var(--muted)">Aucun article pour l’instant.</span></div>
+      <div id="list"><span style="color:var(--muted)">Aucun article pour l’instant.</span></div>
     </div>
   </main>
 </div>
@@ -97,7 +97,8 @@ $("btnLogin").onclick = async () => {
 
 onAuthStateChanged(auth, (u) => {
   if (unsub) { unsub(); unsub = null; }
-  if (u && u.email === ADMIN_EMAIL) {
+  const estAdmin = u ? u.email === ADMIN_EMAIL : false;
+  if (estAdmin) {
     $("login").classList.add("hidden"); $("app").classList.remove("hidden");
     unsub = onValue(ref(db, "products"), (snap) => drawList(snap));
   } else { $("app").classList.add("hidden"); $("login").classList.remove("hidden"); }
@@ -135,7 +136,7 @@ $("save").onclick = async () => {
   try {
     const id = push(ref(db, "products")).key;
     await set(ref(db, "productImages/" + id), photoData);
-    await set(ref(db, "products/" + id), { cat: $("cat").value, name, price: Number($("price").value) || 0, desc: $("desc").value.trim(), ts: serverTimestamp() });
+    await set(ref(db, "products/" + id), { cat: $("cat").value, name, price: Math.max(0, Number($("price").value)), desc: $("desc").value.trim(), ts: serverTimestamp() });
     ["name", "price", "desc", "photo"].forEach((k) => ($(k).value = ""));
     photoData = null; $("preview").style.display = "none";
     st.className = "ok"; st.textContent = "Article publié ✔";
@@ -146,16 +147,16 @@ $("save").onclick = async () => {
 function drawList(snap) {
   const rows = [];
   snap.forEach((c) => { rows.push({ id: c.key, ...c.val() }); });
- rows.sort((a, b) => (b.ts > 0 ? b.ts : 0) - (a.ts > 0 ? a.ts : 0));
+  rows.sort((a, b) => (b.ts > 0 ? b.ts : 0) - (a.ts > 0 ? a.ts : 0));
   const box = $("list");
   if (!rows.length) { box.textContent = "Aucun article pour l’instant."; return; }
   box.replaceChildren(...rows.map((r) => {
     const row = document.createElement("div"); row.className = "row";
     const img = document.createElement("img"); img.alt = "";
-get(ref(db, "productImages/" + r.id)).then((s) => { if (s.val()) img.src = s.val(); });
+    get(ref(db, "productImages/" + r.id)).then((s) => { if (s.val()) img.src = s.val(); });
     const d = document.createElement("div");
     const t = document.createElement("strong"); t.textContent = r.name;
-    const s = document.createElement("small"); s.textContent = (LABELS[r.cat] || r.cat) + " · " + (r.price ? r.price + " USD" : "Sur devis");
+    const s = document.createElement("small"); s.textContent = (LABELS[r.cat] ? LABELS[r.cat] : r.cat) + " · " + (r.price ? r.price + " USD" : "Sur devis");
     d.append(t, s);
     const del = document.createElement("button"); del.className = "del"; del.textContent = "Supprimer";
     del.onclick = async () => {
