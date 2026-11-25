@@ -65,7 +65,7 @@
     </div>
 
     <div class="panel">
-<h2>En ce moment sur le site</h2>
+      <h2>En ce moment sur le site</h2>
       <div class="wrap"><table>
         <thead><tr><th>Qui</th><th>Page</th><th>Appareil</th><th>Arrivé à</th></tr></thead>
         <tbody id="presence"><tr><td colspan="4" class="muted">Personne pour l'instant.</td></tr></tbody>
@@ -83,11 +83,24 @@
 </div>
 <div id="toast" class="hidden"></div>
 
+<script>
+  // Diagnostic : affiche l'erreur à l'écran si le script ne démarre pas
+  window.addEventListener("error", function (e) {
+    var m = document.getElementById("err");
+    if (m) m.textContent = "Erreur de chargement : " + ((e.target && (e.target.src || e.target.href)) || e.message || "inconnue");
+  }, true);
+  setTimeout(function () {
+    var m = document.getElementById("err");
+    if (!window.__adminReady && m) m.textContent = "Le script n’a pas démarré : vérifiez que firebase-config.js est bien publié à côté de admin.html.";
+  }, 3000);
+</script>
 <script type="module">
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDatabase, ref, query, orderByChild, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { firebaseConfig } from "./firebase-config.js";
+
+window.__adminReady = true;
 
 // ⚠️ MET ICI TON EMAIL ADMIN (le même que dans les règles)
 const ADMIN_EMAIL = "benganabalise@gmail.com";
@@ -102,9 +115,9 @@ const $ = (id) => document.getElementById(id);
 let unsubs = [], unread = 0, seen = null;
 
 $("btnLogin").onclick = async () => {
-  $("err").textContent = "";
-  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pass").value); }
-  catch { $("err").textContent = "Email ou mot de passe incorrect."; }
+  $("err").textContent = "Connexion en cours…";
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pass").value); $("err").textContent = ""; }
+  catch (e) { $("err").textContent = "Erreur : " + (e.code || e.message); }
 };
 $("btnOut").onclick = () => signOut(auth);
 
@@ -126,12 +139,12 @@ const who = (r) => r.email ? esc(r.email) : "Visiteur anonyme";
 
 function start() {
   unsubs.push(onValue(ref(db, "presence"), (snap) => {
-    const rows = Object.values(snap.val()  {}).sort((a, b) => (b.since  0) - (a.since || 0));
+    const rows = Object.values(snap.val() || {}).sort((a, b) => (b.since || 0) - (a.since || 0));
     $("sOnline").textContent = rows.length;
     $("sMembers").textContent = rows.filter((r) => r.email).length;
     $("presence").innerHTML = rows.length
       ? rows.map((r) => `<tr><td><span class="dot"></span>${who(r)}</td><td>${esc(r.page)}</td><td>${esc(r.device)}</td><td>${hour(r.since)}</td></tr>`).join("")
-      : <tr><td colspan="4" class="muted">Personne pour l'instant.</td></tr>;
+      : `<tr><td colspan="4" class="muted">Personne pour l'instant.</td></tr>`;
   }));
 
   unsubs.push(onValue(query(ref(db, "events"), orderByChild("ts"), limitToLast(50)), (snap) => {
@@ -149,8 +162,7 @@ function start() {
 
 function notify(msg) {
   unread++; $("badge").textContent = unread; $("badge").classList.remove("hidden");
-  $("bell").classList.remove("ring"); void $("bell").offsetWidth; $("bell").classList.
-add("ring");
+  $("bell").classList.remove("ring"); void $("bell").offsetWidth; $("bell").classList.add("ring");
   $("toast").textContent = "🔔 " + msg; $("toast").classList.remove("hidden");
   setTimeout(() => $("toast").classList.add("hidden"), 5000);
   beep();
