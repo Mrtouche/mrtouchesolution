@@ -146,7 +146,7 @@ $("save").onclick = async () => {
 function drawList(snap) {
   const rows = [];
   snap.forEach((c) => { rows.push({ id: c.key, ...c.val() }); });
-  rows.sort((a, b) => (b.ts  0) - (a.ts  0));
+ rows.sort((a, b) => (b.ts > 0 ? b.ts : 0) - (a.ts > 0 ? a.ts : 0));
   const box = $("list");
   if (!rows.length) { box.textContent = "Aucun article pour l’instant."; return; }
   box.replaceChildren(...rows.map((r) => {
